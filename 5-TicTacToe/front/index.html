@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Bare - Start Bootstrap Template</title>
+    <title>TicTacToe</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -44,22 +44,16 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Start Bootstrap</a>
+                <a class="navbar-brand" href="#">TicTacToe</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <!-- <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="#">About</a>
-                    </li>
-                    <li>
-                        <a href="#">Services</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
+                        <a href="./index.html">TicTacToe</a>
                     </li>
                 </ul>
-            </div>
+            </div> -->
             <!-- /.navbar-collapse -->
         </div>
         <!-- /.container -->
@@ -69,14 +63,53 @@
     <div class="container">
 
         <div class="row">
-            <div class="col-lg-12 text-center">
-                <h1>A Bootstrap Starter Template</h1>
-                <p class="lead">Complete with pre-defined file paths that you won't have to change!</p>
-                <ul class="list-unstyled">
-                    <li>Bootstrap v3.2.0</li>
-                    <li>jQuery v1.11.0</li>
-                </ul>
+            <div class="col-md-6">
+                甲方账户名
+                <input type="text" class="form-control" id="accta" placeholder="">
             </div>
+            <div class="col-md-6">
+                乙方账户名
+                <input type="text" class="form-control" id="acctb" placeholder="">
+            </div>
+            <br><br>
+            <div class="col-md-6">
+                甲方私钥
+                <input type="text" class="form-control" id="keya" placeholder="">
+            </div>
+            <div class="col-md-6">
+                乙方私钥
+                <input type="text" class="form-control" id="keyb" placeholder="">
+            </div>
+            <br><br>
+            <br><br>
+            <div class="col-md-12">
+                <button type="button" class="btn btn-success">创建游戏</button>
+                <button type="button" class="btn btn-warning">重新开始</button>
+                <button type="button" class="btn btn-danger">关闭游戏</button>
+            </div>
+            <br><br>
+            <br><br>
+
+<div class="table-responsive">
+  <table class="table table-bordered">
+    <tr>
+      <td><button type="button" class="btn btn-default btn-xs">&nbsp;</button></td>
+      <td>o</td>
+      <td>x</td>
+    </tr>
+    <tr>
+      <td><button type="button" class="btn btn-default btn-xs">&nbsp;</button></td>
+      <td>x</td>
+      <td><button type="button" class="btn btn-default btn-xs">&nbsp;</button></td>
+    </tr>
+    <tr>
+      <td>x</td>
+      <td>o</td>
+      <td>o</td>
+    </tr>
+  </table>
+</div>
+
         </div>
         <!-- /.row -->
 
