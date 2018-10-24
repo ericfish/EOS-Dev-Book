@@ -99,7 +99,8 @@ cleos wallet private_keys
 cleos wallet import
 # 5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3 - eosio
 
-cleos create account eosio bob EOS67oPbbm…
+cleos create account eosio bob EOS5TGs5dGK4BMC6Qwc2mbWzp1wn1pjrY3D1JFeybb22vRJ1qeLGg
+cleos create account eosio alice EOS5TGs5dGK4BMC6Qwc2mbWzp1wn1pjrY3D1JFeybb22vRJ1qeLGg
 
 
 # 编译部署合约
