@@ -14,6 +14,9 @@ https://github.com/eoshackathon/eos_dapp_development_cn/blob/master/docs/eosjs_m
 
 /scatter
 
+测试地址：
+https://ericfish.github.io/eoswallet/
+
 scatter 文档
 
 https://get-scatter.com/docs/getting-started
