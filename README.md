@@ -1,1 +1,39 @@
-# EOS区块链应用开发指南 实践项目代码仓库
+# 《EOS区块链应用开发指南》实践项目代码仓库
+
+## 1-HelloWorld
+
+本地 Docker EOS 环境部署和测试
+
+## 2-Token
+
+本地 Docker EOS 环境部署和测试
+
+## 3-Wallet
+
+Scatter 版本测试地址（主网）：
+
+https://ericfish.github.io/eoswallet/
+
+## 4-Browser
+
+浏览器地址（主网）：
+
+https://ericfish.github.io/eosbrowser/
+
+## 5-TicTacToe
+
+游戏测试（Jungle 测试网）
+
+https://ericfish.github.io/tictactoe/
+
+## 6-Todolist
+
+工具测试（Jungle 测试网）
+
+https://ericfish.github.io/todolist/
+
+## 7-EOSblog
+
+博客测试（Jungle 测试网）
+
+https://ericfish.github.io/eosblog/
