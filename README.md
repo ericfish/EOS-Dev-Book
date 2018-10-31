@@ -37,3 +37,13 @@ https://ericfish.github.io/todolist/
 博客测试（Jungle 测试网）
 
 https://ericfish.github.io/eosblog/
+
+### 其它
+
+如何设置 Scatter
+
+https://zhuanlan.zhihu.com/p/40250746
+
+如何申请 Jungle 测试网账号、Token，以及连接到 Scatter
+
+https://steemit.com/eos/@ajose01/scatter-and-the-jungle-testnet
