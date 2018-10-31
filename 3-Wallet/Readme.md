@@ -22,3 +22,13 @@ scatter 文档
 https://get-scatter.com/docs/getting-started
 
 注：Scatter 版本不能在本地运行，需要部署到服务器
+
+### 其它参考
+
+#### Scatter API 示例
+
+https://github.com/MediShares/scatter-eos-sample
+
+#### 麦子钱包 mds-eosjs 示例
+
+https://github.com/MediShares/mds-eosjs
