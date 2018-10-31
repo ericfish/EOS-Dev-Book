@@ -29,6 +29,61 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <!-- jQuery Version 1.11.0 -->
+    <script src="js/jquery-1.11.0.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <script src="js/scatter.min.js"></script>
+    <script src="js/eos.min.js"></script>
+    <script>
+
+      // EOS RPC 网络设置
+      var network = {
+        blockchain:'eos',
+        protocol:'https',
+        host:'mainnet.eoscannon.io',
+        port:443,
+        chainId:'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906'
+      };
+      var currentAccount = null;
+
+      $(function(){
+
+        scatter.connect('MY_APP_NAME').then(connected => {
+          if(connected){
+
+            // 删除之前的登录账户
+            // scatter.forgetIdentity();
+
+            // 登录，获取 EOS 账户
+            scatter.getIdentity({accounts:[network]}).then(result => {
+              currentAccount =  result.accounts[0];
+              // alert('account:'+JSON.stringify(currentAccount));
+              // alert('account:'+currentAccount.name);
+              $("#txtfrom").val(currentAccount.name);
+            }).catch(error => {
+              alert('error:'+JSON.stringify(error));
+            });
+
+          }else{
+            alert('connect fail');
+          }
+        });
+      })
+
+    // action
+    function getbalance(){
+
+        var eos = scatter.eos(network, Eos);
+
+        var queryAcct = document.getElementById("txtfrom").value;
+        eos.getCurrencyBalance({ code: "eosio.token", account: queryAcct, symbol: "EOS" }).then(result => $("#txtbalance").val(result[0]));
+    }
+
+
+    </script>
 </head>
 
 <body>
@@ -73,11 +128,12 @@
                 <input type="text" class="form-control" id="txtfrom" placeholder="">
             </div>
             <div class="col-md-12">
-                <button type="button" class="btn btn-primary">查余额</button>
+                <button type="button" class="btn btn-primary" onclick="getbalance()">查EOS余额</button>
             </div>
             <br><br>
             <div class="col-md-12">
-                <h2>当前账户余额：0.0000 EOS</h2>
+                <h2>账户余额：</h2>
+                <input type="text" class="form-control" id="txtbalance" value="0.0000 EOS" readonly>
             </div>
 
         </div>
@@ -85,12 +141,6 @@
 
     </div>
     <!-- /.container -->
-
-    <!-- jQuery Version 1.11.0 -->
-    <script src="js/jquery-1.11.0.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
 
 </body>
 
