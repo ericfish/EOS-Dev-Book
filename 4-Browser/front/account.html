@@ -52,15 +52,59 @@
       });
 
       $(function(){
-        eos.getInfo({}).then(result => {
+
+        (function ($) {
+            $.getUrlParam = function (name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if (r != null) return unescape(r[2]); return null;
+            }
+        })(jQuery);
+
+        var accountName = $.getUrlParam('account');
+
+        eos.getAccount({account_name: accountName}).then(result => {
             console.log(result);
 
-            $("#head_block_num").html(result.head_block_num);
-            $("#last_irreversible_block_num").html(result.last_irreversible_block_num);
-            $("#chain_id").html(result.chain_id);
-            $("#head_block_producer").html(result.head_block_producer);
-            $("#server_version_string").html(result.server_version_string);
+            $("#account_name").html(result.account_name);
+            $("#core_liquid_balance").html(result.core_liquid_balance);
+            $("#cpu_used").html(result.cpu_limit.used);
+            $("#cpu_max").html(result.cpu_limit.max);
+            $("#cpu_weight").html(result.total_resources.cpu_weight);
+            $("#net_used").html(result.net_limit.used);
+            $("#net_max").html(result.net_limit.max);
+            $("#net_weight").html(result.total_resources.net_weight);
+            $("#ram_usage").html(result.ram_usage);
+            $("#ram_quota").html(result.ram_quota);
+        })
 
+        var eosparkurl = encodeURIComponent("https://api.eospark.com/api?module=account&action=get_account_related_trx_info&apikey=a9564ebc3289b7a14551baf8ad5ec60a&account=sendeostoken&page=1&size=10&symbol=EOS&code=eosio.token");
+        var url = "http://eth.fm/site/proxy?url=" + eosparkurl;
+
+        $.ajax({
+           type: 'GET',
+           dataType: 'json',
+           url: url,
+           success: function(jsondata){
+             console.log(jsondata.data);
+
+             var txnarray = jsondata.data.trace_list;
+
+            for(let index in txnarray) {
+                $("#txn_details").append(jsondata.data.trace_list[index].trx_id);
+                $("#txn_details").append(" - ");
+                $("#txn_details").append(jsondata.data.trace_list[index].sender);
+                $("#txn_details").append(" => ");
+                $("#txn_details").append(jsondata.data.trace_list[index].receiver);
+                $("#txn_details").append(" : ");
+                $("#txn_details").append(jsondata.data.trace_list[index].quantity);
+                $("#txn_details").append(jsondata.data.trace_list[index].symbol);
+                $("#txn_details").append(", memo: ");
+                $("#txn_details").append(jsondata.data.trace_list[index].memo);
+                $("#txn_details").append("<br/>");
+            };
+
+           }
         })
 
       })
@@ -108,14 +152,20 @@
         </div><!-- /.row -->
 
         <br><br>
+        <h3>Account Infomation</h3>
         <div class="">
             <table class="table table-hover">
-              <tr><td>Head Block</td><td><span id="head_block_num"></span></td></tr>
-              <tr><td>Irreversible Block</td><td><span id="last_irreversible_block_num"></span></td></tr>
-              <tr><td>Chain ID</td><td><span id="chain_id"></span></td></tr>
-              <tr><td>Block Producer</td><td><span id="head_block_producer"></span></td></tr>
-              <tr><td>Version</td><td><span id="server_version_string"></span></td></tr>
+              <tr><td>account_name</td><td><span id="account_name"></span></td></tr>
+              <tr><td>balance</td><td><span id="core_liquid_balance"></span></td></tr>
+              <tr><td>cpu</td><td><span id="cpu_weight"></span>, <span id="cpu_used"></span>/<span id="cpu_max"></span></td></tr>
+              <tr><td>net</td><td><span id="net_weight"></span>, <span id="net_used"></span>/<span id="net_max"></span></td></tr>
+              <tr><td>ram</td><td><span id="ram_usage"></span>/<span id="ram_quota"></span></td></tr>
             </table>
+        </div>
+
+        <h3>Transactions</h3>
+        <div class="" id="txn_details">
+
         </div>
         <!-- /.row -->
 

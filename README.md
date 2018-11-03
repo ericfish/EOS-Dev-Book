@@ -47,3 +47,11 @@ https://zhuanlan.zhihu.com/p/40250746
 如何申请 Jungle 测试网账号、Token，以及连接到 Scatter
 
 https://steemit.com/eos/@ajose01/scatter-and-the-jungle-testnet
+
+#### 测试网工具
+
+https://eostoolkit.io/
+
+https://dev4eos.com/
+
+https://eospark.com/Jungle

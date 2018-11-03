@@ -8,7 +8,9 @@ eosjs 文档
 
 https://github.com/eoshackathon/eos_dapp_development_cn/blob/master/docs/eosjs_manual.md
 
-注：eosjs 版本需修改 js 中的本地测试环境
+注1：eosjs 版本需修改 js 中的本地测试环境
+
+注2：书中提到的 eosjs2 库已经和 eosjs 库合并
 
 ### scatter 版本
 
