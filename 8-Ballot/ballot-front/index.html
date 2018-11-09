@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>EOS 链上投票工具</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <style>
+    body {
+        padding-top: 70px;
+        /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+    }
+    </style>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- jQuery Version 1.11.0 -->
+    <script src="js/jquery-1.11.0.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <script src="js/scatter.min.js"></script>
+    <script src="js/eos.min.js"></script>
+    <script>
+
+    // mainnet
+    // var chainId = 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906';
+    // var endpoint = 'https://mainnet.eoscannon.io';
+
+    // kylin
+    var chainId = '5fff1dae8dc8e2fc4d5b23b2c7665c97f9e9d8edf2b6485a86ba311c25639191';
+    var endpoint = 'https://api-kylin.eosasia.one';
+
+    var eos = Eos({
+        httpEndpoint: endpoint,
+        chainId: chainId,
+      });
+
+    var network = null;
+    var identity = null;
+
+    function checkoutNetworks() {
+      var httpEndpoint = endpoint.split('://');
+      var host = httpEndpoint[1].split(':');
+
+      network = {
+        blockchain: 'eos',
+        host: host[0],
+        port: host.length > 1 ? host[0] : (httpEndpoint[0].toLowerCase() == 'https' ? 443 : 80),
+        chainId: chainId,
+        protocol: httpEndpoint[0],
+        httpEndpoint : "https://api-kylin.eosasia.one",
+      };
+
+      console.log(`网络参数：${JSON.stringify(network)}`);
+    }
+
+    function hasScatter() {
+      return scatter !== undefined;
+    }
+
+    function getAccountName() {
+      return identity == null || identity.accounts == null || identity.accounts[0].name;
+    }
+
+    function checkAccount() {
+      try {
+        eos.getAccount({ account_name: getAccountName() }).then(res => {
+          var cb = res.core_liquid_balance;
+          balance = res.length == 0 ? 0 : new Number(cb.split(' ')[0]).valueOf();
+          console.log(getAccountName()+', '+cb);
+          $("#accountbalance").html(getAccountName()+', '+cb);
+
+          var cl = res.cpu_limit;
+          cpuAvailable = new Number((cl.available * 100 / cl.max)).toFixed(2) + '%';
+          console.log(cpuAvailable);
+          $("#accountcpu").html('CPU: '+cpuAvailable);
+          hasCPU = cl.available > 0 && ((cl.available / cl.max) >= 0.1);
+
+          ramAvailable = new Number((res.ram_usage * 100 / res.ram_quota)).toFixed(2) + '%';
+          console.log(ramAvailable);
+          $("#accountram").html('RAM: '+ramAvailable);
+
+          // setTimeout(checkAccount, 1000);
+        }).catch(err => {
+          console.log(`检查账号出错：${JSON.stringify(err)}`);
+          // setTimeout(checkAccount, 1000);
+        });
+      } catch (error) {
+        console.log(`检查账号出错：${JSON.stringify(error)}`);
+        // setTimeout(checkAccount, 1000);
+      }
+    }
+
+    function open(successCallback, errorCallbak) {
+      let that = this;
+      if (!hasScatter()) {
+        errorCallbak("scatter required");
+        return;
+      }
+      checkoutNetworks();
+      scatter.suggestNetwork(network).then(() => {
+        const requirements = { accounts: [network] };
+        scatter.getIdentity(requirements).then(
+          function (i) {
+            if (!i) {
+              return errorCallbak(null);
+            }
+            identity = i;
+            console.log(identity.accounts[0].name);
+            // eos = scatter.eos(network, Eos, { expireInSeconds: 60 }, "https");
+            successCallback();
+          }
+        ).catch(error => {
+          errorCallbak(error);
+        });
+      }).catch(error => {
+        errorCallbak(error);
+      });
+    }
+
+    function transfer(recipient, amount, memo, successCallback, errorCallback) {
+      let that = this;
+      if (that.identity == null) {
+        that.open(() => {
+          transfer(recipient, amount, memo, successCallback, errorCallback);
+        }, errorCallback);
+      } else {
+        const account = that.identity.accounts.find(x => x.blockchain === that.network.blockchain);
+        const transactionOptions = { authorization: [`${account.name}@${account.authority}`], broadcast: true, sign: true };
+        that.eos.transfer(account.name, recipient, amount, memo, transactionOptions).then(trx => {
+          successCallback(trx);
+        }).catch(error => {
+          errorCallback(error);
+        });
+      }
+    }
+
+    function login() {
+      if (!hasScatter()) {
+        alert('scatter required');
+        return;
+      }
+      scatter.connect('SAMPLE').then(connected => {
+        open(function () {
+          console.log(`登陆成功：${JSON.stringify(identity)}`);
+          $("#logindiv").hide();
+          $("#logoutdiv").show();
+          checkAccount();
+        }, function (error) {
+          console.log(`登陆出错：${JSON.stringify(error)}，请关闭重新打开或者刷新本页面`);
+        });
+      });
+    }
+
+    function logout() {
+      if (identity) {
+        identity = null;
+        if (hasScatter()) {
+          scatter.forgetIdentity().then(() => {
+            $("#logindiv").show();
+            $("#logoutdiv").hide();
+            console.log('logout success');
+          });
+        }
+      }
+    }
+
+    // 清理之前已登录的 identity
+    function cleanscatter() {
+      if (hasScatter()) {
+        scatter.connect('SAMPLE').then(connected => {
+          scatter.forgetIdentity().then(() => {
+            console.log('logout success');
+          });
+        });
+      }
+    }
+
+    function startvote(votekey){
+      if (this.identity == null) {
+          alert('请先登录');
+      }
+
+      var eos = scatter.eos(network, Eos);
+      const currentAccount = this.identity.accounts.find(x => x.blockchain === this.network.blockchain);
+
+      eos.transaction({
+          actions: [
+              {
+                  account: 'erictest1112',
+                  name:    'startvote',
+                  authorization: [{
+                      actor:      currentAccount.name,
+                      permission: currentAccount.authority
+                  }],
+                  data: {
+                      account:    currentAccount.name,
+                      vote_key: votekey
+                  }
+              }
+          ]
+      }).then(result => {
+        alert('success!');
+      }).catch(error => {
+        alert('error:'+JSON.stringify(error));
+      });
+    }
+
+    $(function(){
+
+      login();
+
+      eos.getTableRows({
+               scope: 'erictest1112',
+               code: 'erictest1112',
+               table: 'vote',
+               json: true,
+               lower_bound: 0,
+               // limit: 50
+            }).then(result => {
+               // console.log( result.rows[0] );
+
+              for(let index in result.rows) {
+                  var tablerow = "";
+                  tablerow = tablerow + "<tr>";
+                  tablerow = tablerow + "<td>"+result.rows[index].key+"</td>";
+                  tablerow = tablerow + "<td>"+result.rows[index].vote_name+"</td>";
+                  tablerow = tablerow + "<td>"+result.rows[index].owner+"</td>";
+                  tablerow = tablerow + "<td>"+result.rows[index].created+"</td>";
+                  tablerow = tablerow + "<td>"+result.rows[index].deadline+"</td>";
+                  tablerow = tablerow + "<td>"+result.rows[index].voting+"</td>";
+                  tablerow = tablerow + "<td>";
+                  if(result.rows[index].voting == 0){
+                    tablerow = tablerow + "<a onclick='startvote("+result.rows[index].key+")'>开启投票</a> &nbsp;&nbsp;";
+                  }
+                  tablerow = tablerow + "<a href='detail.html?key="+result.rows[index].key+"'>查看</a></td>";
+                  tablerow = tablerow + "</tr>";
+
+                  $("#tablecontent").append(tablerow);
+              };
+
+            }).catch(err => console.log(err));
+
+    })
+
+    </script>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="./index.html">EOS链上投票</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li id="logindiv"><a href="#" onclick="login()">Login</a></li>
+                    <li id="logoutdiv"><a href="#" onclick="logout()">Logout</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-4">
+                <a href="createvote.html" class="btn btn-primary">发起投票</a>
+            </div>
+        </div><br><br>
+        <!-- /.row -->
+
+        <table class="table table-bordered">
+          <thead><tr>
+            <th>key</th>
+            <th>name</th>
+            <th>owner</th>
+            <th>创建时间</th>
+            <th>截止投票时间</th>
+            <th>已开启</th>
+            <th>操作</th>
+          </tr></thead>
+          <tbody id="tablecontent"></tbody>
+        </table>
+
+    </div>
+    <!-- /.container -->
+
+    <footer class="bs-docs-footer">
+      <div class="container">
+        <h3>Account Info:</h3>
+        <p id="accountbalance"></p>
+        <p id="accountcpu"></p>
+        <p id="accountram"></p>
+        <p>合约账户：<a href="https://kylin.bloks.io/account/erictest1112" target="_blank">erictest1112</a>（Kylin 测试网) </p>
+        <p><a href="#" onclick="cleanscatter()">清理 Scatter 缓存账号</a></p>
+      </div>
+    </footer>
+
+</body>
+
+</html>

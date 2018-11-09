@@ -54,4 +54,4 @@ https://eostoolkit.io/
 
 https://dev4eos.com/
 
-https://eospark.com/Jungle
+https://jungle.bloks.io/

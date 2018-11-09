@@ -9,8 +9,9 @@ using std::string;
 class ballot : public eosio::contract
 {
 public:
-  const uint32_t FIVE_MINUTES = 5 * 60;
+  const uint32_t OPENTIME = 24 * 60 * 60; // 默认24小时
 
+  // 构造器
   ballot(account_name self)
       : eosio::contract(self),
         proposals(self, self),
@@ -21,7 +22,7 @@ public:
   // @abi action
   void addvote(account_name account, string vote_name)
   {
-    require_auth(account);
+    require_auth(account); // 调用该action的人，必须是vote的owner，不能代别人来创建vote
     // 如果同名的投票存在就退出
     for (auto &item : votes)
     {
@@ -53,7 +54,7 @@ public:
     eosio_assert(!vtit->voting, "vote is already voting");
     // 更新投票截止时间
     votes.modify(vtit, 0, [&](auto &vote) {
-      vote.deadline = time_point_sec(time_point_sec(now()) + FIVE_MINUTES);
+      vote.deadline = time_point_sec(time_point_sec(now()) + OPENTIME);
       vote.voting = true;
     });
   }
@@ -206,7 +207,7 @@ private:
   //@abi table vote i64
   struct vote
   {
-    uint64_t key;
+    uint64_t key;                 // 主键
     string vote_name;             // 活动名
     account_name owner;           // 发起人
     time_point_sec created;       // 创建时间
@@ -220,9 +221,9 @@ private:
       return key;
     }
 
-    EOSLIB_SERIALIZE(vote, (key)(vote_name)(owner)(created)(deadline)(voting)(winner));
+    EOSLIB_SERIALIZE(vote, (key)(vote_name)(owner)(created)(deadline)(voting)(winner)); // 定义序列化的相关配置
   };
-  typedef eosio::multi_index<N(vote), vote> vote_index;
+  typedef eosio::multi_index<N(vote), vote> vote_index; // 定义索引
 
   // 对一个提案投票的记录
   //@abi table ppslvoter i64
@@ -239,7 +240,7 @@ private:
   };
   typedef eosio::multi_index<N(ppslvoter), ppslvoter,
                              indexed_by<N(owner), const_mem_fun<ppslvoter, uint64_t, &ppslvoter::by_owner>>>
-      ppslvoter_index;
+      ppslvoter_index; // 多重索引
 
   // 提案的数据结构
   //@abi table proposal i64
@@ -251,7 +252,7 @@ private:
     uint64_t vote_count; // 提议接受的投票数
 
     uint64_t primary_key() const { return key; }
-    uint64_t by_vote_key() const { return vote_key; }
+    uint64_t by_vote_key() const { return vote_key; }  // 把vote_key作为提案的二级索引
 
     EOSLIB_SERIALIZE(proposal, (key)(vote_key)(name)(vote_count));
   };
@@ -259,6 +260,7 @@ private:
                              indexed_by<N(vote_key), const_mem_fun<proposal, uint64_t, &proposal::by_vote_key>>>
       proposal_index;
 
+  // 成员变量
   vote_index votes;
   ppslvoter_index ppslvoters;
   proposal_index proposals;
