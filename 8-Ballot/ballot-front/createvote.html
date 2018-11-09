@@ -177,10 +177,12 @@
       }
     }
 
-    function startvote(votekey){
+    function createvote(){
       if (this.identity == null) {
           alert('请先登录');
       }
+
+      name = $("#txtname").val();
 
       var eos = scatter.eos(network, Eos);
       const currentAccount = this.identity.accounts.find(x => x.blockchain === this.network.blockchain);
@@ -189,14 +191,14 @@
           actions: [
               {
                   account: 'erictest1112',
-                  name:    'startvote',
+                  name:    'addvote',
                   authorization: [{
                       actor:      currentAccount.name,
                       permission: currentAccount.authority
                   }],
                   data: {
                       account:    currentAccount.name,
-                      vote_key: votekey
+                      vote_name: name
                   }
               }
           ]
@@ -210,37 +212,6 @@
     $(function(){
 
       login();
-
-      eos.getTableRows({
-               scope: 'erictest1112',
-               code: 'erictest1112',
-               table: 'vote',
-               json: true,
-               lower_bound: 0,
-               // limit: 50
-            }).then(result => {
-               // console.log( result.rows[0] );
-
-              for(let index in result.rows) {
-                  var tablerow = "";
-                  tablerow = tablerow + "<tr>";
-                  tablerow = tablerow + "<td>"+result.rows[index].key+"</td>";
-                  tablerow = tablerow + "<td>"+result.rows[index].vote_name+"</td>";
-                  tablerow = tablerow + "<td>"+result.rows[index].owner+"</td>";
-                  tablerow = tablerow + "<td>"+result.rows[index].created+"</td>";
-                  tablerow = tablerow + "<td>"+result.rows[index].deadline+"</td>";
-                  tablerow = tablerow + "<td>"+result.rows[index].voting+"</td>";
-                  tablerow = tablerow + "<td>";
-                  if(result.rows[index].voting == 0){
-                    tablerow = tablerow + "<a onclick='startvote("+result.rows[index].key+")'>开启投票</a> &nbsp;&nbsp;";
-                  }
-                  tablerow = tablerow + "<a href='detail.html?key="+result.rows[index].key+"'>查看</a></td>";
-                  tablerow = tablerow + "</tr>";
-
-                  $("#tablecontent").append(tablerow);
-              };
-
-            }).catch(err => console.log(err));
 
     })
 
@@ -284,23 +255,20 @@
 
         <div class="row">
             <div class="col-md-4">
-                <a href="createvote.html" class="btn btn-primary">发起投票</a>
+                投票名称
             </div>
-        </div><br><br>
-        <!-- /.row -->
+            <div class="col-md-8">
+                <input type="text" class="form-control" id="txtname">
+            </div>
+            <br><br>
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-8">
+                <button type="button" class="btn btn-primary" onclick="createvote()">发起</button>
+            </div>
 
-        <table class="table table-bordered">
-          <thead><tr>
-            <th>key</th>
-            <th>name</th>
-            <th>owner</th>
-            <th>创建时间</th>
-            <th>截止投票时间</th>
-            <th>已开启</th>
-            <th>操作</th>
-          </tr></thead>
-          <tbody id="tablecontent"></tbody>
-        </table>
+        </div>
+        <!-- /.row -->
 
     </div>
     <!-- /.container -->

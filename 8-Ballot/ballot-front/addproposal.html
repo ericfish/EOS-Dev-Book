@@ -56,6 +56,8 @@
     var network = null;
     var identity = null;
 
+    var votekey1;
+
     function checkoutNetworks() {
       var httpEndpoint = endpoint.split('://');
       var host = httpEndpoint[1].split(':');
@@ -177,10 +179,12 @@
       }
     }
 
-    function startvote(votekey){
+    function addproposal(){
       if (this.identity == null) {
           alert('请先登录');
       }
+
+      var txtname = $("#txtname").val();
 
       var eos = scatter.eos(network, Eos);
       const currentAccount = this.identity.accounts.find(x => x.blockchain === this.network.blockchain);
@@ -189,14 +193,15 @@
           actions: [
               {
                   account: 'erictest1112',
-                  name:    'startvote',
+                  name:    'addproposal',
                   authorization: [{
                       actor:      currentAccount.name,
                       permission: currentAccount.authority
                   }],
                   data: {
                       account:    currentAccount.name,
-                      vote_key: votekey
+                      vote_key:   votekey1,
+                      proposal_name:   txtname
                   }
               }
           ]
@@ -211,36 +216,15 @@
 
       login();
 
-      eos.getTableRows({
-               scope: 'erictest1112',
-               code: 'erictest1112',
-               table: 'vote',
-               json: true,
-               lower_bound: 0,
-               // limit: 50
-            }).then(result => {
-               // console.log( result.rows[0] );
+        (function ($) {
+            $.getUrlParam = function (name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if (r != null) return unescape(r[2]); return null;
+            }
+        })(jQuery);
 
-              for(let index in result.rows) {
-                  var tablerow = "";
-                  tablerow = tablerow + "<tr>";
-                  tablerow = tablerow + "<td>"+result.rows[index].key+"</td>";
-                  tablerow = tablerow + "<td>"+result.rows[index].vote_name+"</td>";
-                  tablerow = tablerow + "<td>"+result.rows[index].owner+"</td>";
-                  tablerow = tablerow + "<td>"+result.rows[index].created+"</td>";
-                  tablerow = tablerow + "<td>"+result.rows[index].deadline+"</td>";
-                  tablerow = tablerow + "<td>"+result.rows[index].voting+"</td>";
-                  tablerow = tablerow + "<td>";
-                  if(result.rows[index].voting == 0){
-                    tablerow = tablerow + "<a onclick='startvote("+result.rows[index].key+")'>开启投票</a> &nbsp;&nbsp;";
-                  }
-                  tablerow = tablerow + "<a href='detail.html?key="+result.rows[index].key+"'>查看</a></td>";
-                  tablerow = tablerow + "</tr>";
-
-                  $("#tablecontent").append(tablerow);
-              };
-
-            }).catch(err => console.log(err));
+        votekey1 = $.getUrlParam('votekey');
 
     })
 
@@ -284,23 +268,20 @@
 
         <div class="row">
             <div class="col-md-4">
-                <a href="createvote.html" class="btn btn-primary">发起投票</a>
+                投票名称
             </div>
-        </div><br><br>
-        <!-- /.row -->
+            <div class="col-md-8">
+                <input type="text" class="form-control" id="txtname">
+            </div>
+            <br><br>
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-8">
+                <button type="button" class="btn btn-primary" onclick="addproposal()">提交</button>
+            </div>
 
-        <table class="table table-bordered">
-          <thead><tr>
-            <th>key</th>
-            <th>name</th>
-            <th>owner</th>
-            <th>创建时间</th>
-            <th>截止投票时间</th>
-            <th>已开启</th>
-            <th>操作</th>
-          </tr></thead>
-          <tbody id="tablecontent"></tbody>
-        </table>
+        </div>
+        <!-- /.row -->
 
     </div>
     <!-- /.container -->

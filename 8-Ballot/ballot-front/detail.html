@@ -48,7 +48,7 @@
     var endpoint = 'https://api-kylin.eosasia.one';
 
     var eos = Eos({
-        keyProvider: '',// private key
+        keyProvider: '',
         httpEndpoint: endpoint,
         chainId: chainId,
       });
@@ -208,6 +208,10 @@
       }).catch(error => {
         alert('error:'+JSON.stringify(error));
       });
+    }
+
+    function addproposal() {
+      window.location.href='addproposal.html?votekey='+votekey1;
     }
 
     $(function(){
