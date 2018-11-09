@@ -22,25 +22,21 @@ https://ericfish.github.io/eosbrowser/
 
 ## 5-TicTacToe
 
-游戏测试（Jungle 测试网）
+游戏测试（Kylin 测试网）
 
-https://ericfish.github.io/tictactoe/
+https://ericfish.github.io/eostic/index.html
 
 ## 6-Todolist
 
-工具测试（Jungle 测试网）
-
-https://ericfish.github.io/todolist/
+工具测试
 
 ## 7-EOSblog
 
-博客测试（Jungle 测试网）
-
-https://ericfish.github.io/eosblog/
+博客测试
 
 ## 8-Ballot
 
-EOS 链上投票（Jungle 测试网）
+EOS 链上投票（Kylin 测试网）
 
 https://ericfish.github.io/eosvote/
 

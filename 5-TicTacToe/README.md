@@ -10,5 +10,5 @@
 
 Kylin 测试网合约账户：erictest1113
 
-https://ericfish.github.io/eostic/
+https://ericfish.github.io/eostic/index.html
 
