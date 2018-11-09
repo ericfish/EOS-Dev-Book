@@ -134,31 +134,8 @@ sudo ./install.sh
 which eosio-cpp
 
 
-# ballot合约
 
-eosiocpp -g ballot.abi ballot.cpp
+## 测试地址：
 
-eosiocpp -o ballot.wast ballot.cpp
-
-cleos create account eosio ballot EOS5TGs5dGK4BMC6Qwc2mbWzp1wn1pjrY3D1JFeybb22vRJ1qeLGg
-
-cd ..
-cleos set contract ballot ballot
-
-cleos get table ballot ballot vote
-cleos get table ballot ballot proposal
-cleos get table ballot ballot ppslvoter
-
-cleos push action ballot addvote '["bob","中午吃什么？"]' -p bob@active
-
-cleos push action ballot addproposal '["bob",0,"时差七小时"]' -p bob@active
-cleos push action ballot addproposal '["bob",0,"汉堡王"]' -p bob@active
-
-cleos push action ballot startvote '["bob",0]' -p bob@active
-
-cleos push action ballot voteproposal '["bob",0]' -p bob@active
-
-cleos push action ballot delvoteppsl '["hello",0]' -p hello@active
-
-cleos push action ballot winproposal '["bob",0]' -p bob@active
+Kylin 测试网合约账户：erictest1111
 

@@ -177,10 +177,13 @@
       }
     }
 
-    function restart(challenger, host){
+    function create(){
       if (this.identity == null) {
           alert('请先登录');
       }
+
+      challenger = $("#txtc").val();
+      host = $("#txth").val();
 
       var eos = scatter.eos(network, Eos);
       const currentAccount = this.identity.accounts.find(x => x.blockchain === this.network.blockchain);
@@ -189,38 +192,7 @@
           actions: [
               {
                   account: 'erictest1113',
-                  name:    'restart',
-                  authorization: [{
-                      actor:      currentAccount.name,
-                      permission: currentAccount.authority
-                  }],
-                  data: {
-                      challenger:    challenger,
-                      host: host,
-                      by: currentAccount.name
-                  }
-              }
-          ]
-      }).then(result => {
-        alert('success!');
-      }).catch(error => {
-        alert('error:'+JSON.stringify(error));
-      });
-    }
-
-    function stop(challenger, host){
-      if (this.identity == null) {
-          alert('请先登录');
-      }
-
-      var eos = scatter.eos(network, Eos);
-      const currentAccount = this.identity.accounts.find(x => x.blockchain === this.network.blockchain);
-
-      eos.transaction({
-          actions: [
-              {
-                  account: 'erictest1113',
-                  name:    'close',
+                  name:    'create',
                   authorization: [{
                       actor:      currentAccount.name,
                       permission: currentAccount.authority
@@ -241,30 +213,6 @@
     $(function(){
 
       login();
-
-      eos.getTableRows({
-               scope: 'erictest1113',
-               code: 'erictest1113',
-               table: 'games',
-               json: true,
-               lower_bound: 0,
-               // limit: 50
-            }).then(result => {
-               // console.log( result.rows[0] );
-
-              for(let index in result.rows) {
-                  var tablerow = "";
-                  tablerow = tablerow + "<tr>";
-                  tablerow = tablerow + "<td>"+result.rows[index].challenger+"</td>";
-                  tablerow = tablerow + "<td>"+result.rows[index].host+"</td>";
-                  tablerow = tablerow + "<td>"+result.rows[index].winner+"</td>";
-                  tablerow = tablerow + "<td><a href='play.html?challenger="+result.rows[index].challenger+"'>Play</a> &nbsp; <a onclick=restart('"+result.rows[index].challenger+"','"+result.rows[index].host+"')>Restart</a> &nbsp; <a onclick=stop('"+result.rows[index].challenger+"','"+result.rows[index].host+"')>Close</a></td>";
-                  tablerow = tablerow + "</tr>";
-
-                  $("#tablecontent").append(tablerow);
-              };
-
-            }).catch(err => console.log(err));
 
     })
 
@@ -308,20 +256,27 @@
 
         <div class="row">
             <div class="col-md-4">
-                <a href="create.html" class="btn btn-primary">创建新游戏</a>
+                甲方
             </div>
-        </div><br><br>
-        <!-- /.row -->
+            <div class="col-md-8">
+                <input type="text" class="form-control" id="txtc">
+            </div>
+            <br><br>
+            <div class="col-md-4">
+                乙方
+            </div>
+            <div class="col-md-8">
+                <input type="text" class="form-control" id="txth">
+            </div>
+            <br><br>
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-8">
+                <button type="button" class="btn btn-primary" onclick="create()">创建</button>
+            </div>
 
-        <table class="table table-bordered">
-          <thead><tr>
-            <th>甲方</th>
-            <th>乙方</th>
-            <th>获胜方</th>
-            <th>操作</th>
-          </tr></thead>
-          <tbody id="tablecontent"></tbody>
-        </table>
+        </div>
+        <!-- /.row -->
 
     </div>
     <!-- /.container -->

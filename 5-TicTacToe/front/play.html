@@ -56,6 +56,9 @@
     var network = null;
     var identity = null;
 
+    var challenger;
+    var host;
+
     function checkoutNetworks() {
       var httpEndpoint = endpoint.split('://');
       var host = httpEndpoint[1].split(':');
@@ -177,7 +180,7 @@
       }
     }
 
-    function restart(challenger, host){
+    function move(row, column){
       if (this.identity == null) {
           alert('请先登录');
       }
@@ -189,80 +192,85 @@
           actions: [
               {
                   account: 'erictest1113',
-                  name:    'restart',
+                  name:    'move',
                   authorization: [{
                       actor:      currentAccount.name,
                       permission: currentAccount.authority
                   }],
                   data: {
                       challenger:    challenger,
-                      host: host,
-                      by: currentAccount.name
+                      host:          host,
+                      by:            currentAccount.name,
+                      row:           row,
+                      column:        column
                   }
               }
           ]
       }).then(result => {
         alert('success!');
+        location.reload();
       }).catch(error => {
         alert('error:'+JSON.stringify(error));
       });
     }
 
-    function stop(challenger, host){
-      if (this.identity == null) {
-          alert('请先登录');
+    function tablerowdata(inputdata, row, column){
+      if(inputdata==0){
+        return '<td><button type="button" class="btn btn-default btn-xs" onclick=move('+ row + ',' + column +')>&nbsp;</button></td>';
+      } else if(inputdata==1){
+        return '<td>o</td>';
+      } else {
+        return '<td>x</td>';
       }
-
-      var eos = scatter.eos(network, Eos);
-      const currentAccount = this.identity.accounts.find(x => x.blockchain === this.network.blockchain);
-
-      eos.transaction({
-          actions: [
-              {
-                  account: 'erictest1113',
-                  name:    'close',
-                  authorization: [{
-                      actor:      currentAccount.name,
-                      permission: currentAccount.authority
-                  }],
-                  data: {
-                      challenger:    challenger,
-                      host: host
-                  }
-              }
-          ]
-      }).then(result => {
-        alert('success!');
-      }).catch(error => {
-        alert('error:'+JSON.stringify(error));
-      });
     }
 
     $(function(){
 
       login();
 
+      (function ($) {
+          $.getUrlParam = function (name) {
+              var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+              var r = window.location.search.substr(1).match(reg);
+              if (r != null) return unescape(r[2]); return null;
+          }
+      })(jQuery);
+
+      challenger = $.getUrlParam('challenger');
+
       eos.getTableRows({
                scope: 'erictest1113',
                code: 'erictest1113',
                table: 'games',
                json: true,
-               lower_bound: 0,
-               // limit: 50
+               lower_bound: challenger,
+               limit: 1
             }).then(result => {
                // console.log( result.rows[0] );
 
-              for(let index in result.rows) {
-                  var tablerow = "";
-                  tablerow = tablerow + "<tr>";
-                  tablerow = tablerow + "<td>"+result.rows[index].challenger+"</td>";
-                  tablerow = tablerow + "<td>"+result.rows[index].host+"</td>";
-                  tablerow = tablerow + "<td>"+result.rows[index].winner+"</td>";
-                  tablerow = tablerow + "<td><a href='play.html?challenger="+result.rows[index].challenger+"'>Play</a> &nbsp; <a onclick=restart('"+result.rows[index].challenger+"','"+result.rows[index].host+"')>Restart</a> &nbsp; <a onclick=stop('"+result.rows[index].challenger+"','"+result.rows[index].host+"')>Close</a></td>";
-                  tablerow = tablerow + "</tr>";
+            host = result.rows[0].host;
 
-                  $("#tablecontent").append(tablerow);
-              };
+            $("#spanchallenger").html(challenger);
+            $("#spanhost").html(host);
+            $("#spanturn").html(result.rows[0].turn);
+
+            var tablerow = "";
+            tablerow = tablerow + tablerowdata(result.rows[0].board[0],0,0);
+            tablerow = tablerow + tablerowdata(result.rows[0].board[1],0,1);
+            tablerow = tablerow + tablerowdata(result.rows[0].board[2],0,2);
+            $("#line1").append(tablerow);
+
+            tablerow = "";
+            tablerow = tablerow + tablerowdata(result.rows[0].board[3],1,0);
+            tablerow = tablerow + tablerowdata(result.rows[0].board[4],1,1);
+            tablerow = tablerow + tablerowdata(result.rows[0].board[5],1,2);
+            $("#line2").append(tablerow);
+
+            tablerow = "";
+            tablerow = tablerow + tablerowdata(result.rows[0].board[6],2,0);
+            tablerow = tablerow + tablerowdata(result.rows[0].board[7],2,1);
+            tablerow = tablerow + tablerowdata(result.rows[0].board[8],2,2);
+            $("#line3").append(tablerow);
 
             }).catch(err => console.log(err));
 
@@ -313,14 +321,17 @@
         </div><br><br>
         <!-- /.row -->
 
+        <p>甲方：<span id="spanchallenger"></span></p>
+        <p>乙方：<span id="spanhost"></span></p>
+        <p>当前轮到：<span id="spanturn"></span></p>
+
         <table class="table table-bordered">
-          <thead><tr>
-            <th>甲方</th>
-            <th>乙方</th>
-            <th>获胜方</th>
-            <th>操作</th>
-          </tr></thead>
-          <tbody id="tablecontent"></tbody>
+          <tr id="line1">
+          </tr>
+          <tr id="line2">
+          </tr>
+          <tr id="line3">
+          </tr>
         </table>
 
     </div>
