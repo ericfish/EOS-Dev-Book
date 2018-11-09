@@ -28,11 +28,11 @@ https://ericfish.github.io/eostic/index.html
 
 ## 6-Todolist
 
-工具测试
+Todo List 应用，前端 React 开发
 
 ## 7-EOSblog
 
-博客测试
+博客应用，前端 React 开发
 
 ## 8-Ballot
 
