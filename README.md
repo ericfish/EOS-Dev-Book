@@ -38,6 +38,12 @@ https://ericfish.github.io/todolist/
 
 https://ericfish.github.io/eosblog/
 
+## 8-Ballot
+
+EOS 链上投票（Jungle 测试网）
+
+https://ericfish.github.io/eosvote/
+
 ### 其它
 
 如何设置 Scatter
