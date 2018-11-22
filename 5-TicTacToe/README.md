@@ -4,7 +4,7 @@
 
 /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --user-data-dir="/Users/[MacUserName]/temp/Google/Chrome/SystemA/dev"
 
-新安装 Scatter 插件和 SwitchSharp 插件
+重新安装 Scatter 插件和 SwitchSharp 插件
 
 ## 测试地址：
 
