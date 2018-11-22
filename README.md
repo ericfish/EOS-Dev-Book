@@ -56,6 +56,20 @@ https://eostoolkit.io/
 
 https://dev4eos.com/
 
-https://jungle.bloks.io/
+##### 麒麟测试网
+
+http://blog.eosdata.io/index.php/2018/09/25/cryptokylin-eos-testnet/
 
 https://kylin.bloks.io/
+
+##### Jungle 测试网
+
+http://blog.eosdata.io/index.php/2018/11/05/jungle-eos-testnet/
+
+https://jungle.bloks.io/
+
+##### 开发者社区
+
+http://blog.eosdata.io
+
+![image](http://qiniu.eth.fm/2018-04-13-canaan2.jpg)
