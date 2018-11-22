@@ -72,4 +72,6 @@ https://jungle.bloks.io/
 
 http://blog.eosdata.io
 
-![w300](http://qiniu.eth.fm/2018-04-13-canaan2.jpg)
+扫码加入柚子开发者微信群
+
+![w300](http://qiniu.eth.fm/2018-11-22-qrcode-canaan.jpg)
