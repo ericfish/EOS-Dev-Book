@@ -72,4 +72,4 @@ https://jungle.bloks.io/
 
 http://blog.eosdata.io
 
-![image](http://qiniu.eth.fm/2018-04-13-canaan2.jpg)
+![w300](http://qiniu.eth.fm/2018-04-13-canaan2.jpg)
