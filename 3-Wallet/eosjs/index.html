@@ -54,7 +54,7 @@
     */
 
     eos = Eos({
-        keyProvider: '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3',// 修改为本地 Docker 环境测试账号的 private key
+        keyProvider: '5JzSEHuBzkjnCm3dfFPrt9w9N4n35CSTtvosBGJB6i8FU5bYqwY',// 修改为本地 Docker 环境测试账号的 private key
         httpEndpoint: 'http://127.0.0.1:8888',
         chainId: chain.sys,
       });
@@ -65,12 +65,12 @@
 
         var fromAcct = document.getElementById("txtfrom").value;
         var toAcct = document.getElementById("txtto").value;
-        var sendAmt = document.getElementById("txtamt").value + ' EOS';
+        var sendAmt = document.getElementById("txtamt").value + ' SYS';
 
         eos.transaction({
             actions: [
                 {
-                    account: 'eosio.token',
+                    account: 'selftoken',
                     name:    'transfer',
                     authorization: [{
                         actor:      fromAcct,
@@ -146,7 +146,7 @@
             </div>
             <br><br>
             <div class="col-md-4">
-                转账金额（EOS）
+                转账金额（SYS）
             </div>
             <div class="col-md-8">
                 <input type="text" class="form-control" id="txtamt" placeholder="0.0000">

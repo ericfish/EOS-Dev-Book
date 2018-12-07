@@ -78,7 +78,7 @@
             $("#ram_quota").html(result.ram_quota);
         })
 
-        var eosparkurl = encodeURIComponent("https://api.eospark.com/api?module=account&action=get_account_related_trx_info&apikey=a9564ebc3289b7a14551baf8ad5ec60a&account=sendeostoken&page=1&size=10&symbol=EOS&code=eosio.token");
+        var eosparkurl = encodeURIComponent("https://api.eospark.com/api?module=account&action=get_account_related_trx_info&apikey=a9564ebc3289b7a14551baf8ad5ec60a&account="+accountName+"&page=1&size=10&symbol=EOS&code=eosio.token");
         var url = "http://eth.fm/site/proxy?url=" + eosparkurl;
 
         $.ajax({

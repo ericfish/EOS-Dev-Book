@@ -45,26 +45,26 @@
         sys: 'cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f' // 修改为本地 Docker 环境 ChainID
       }
 
+    /*
     eos = Eos({
         keyProvider: '',// private key
         httpEndpoint: 'http://api.eosbeijing.one',
         chainId: chain.main,
       });
+    */
 
-    /*
     eos = Eos({
-        keyProvider: '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3',// 修改为本地 Docker 环境测试账号的 private key
+        keyProvider: '5JzSEHuBzkjnCm3dfFPrt9w9N4n35CSTtvosBGJB6i8FU5bYqwY',// 修改为本地 Docker 环境测试账号的 private key
         httpEndpoint: 'http://127.0.0.1:8888',
         chainId: chain.sys,
       });
-    */
 
     // action
     function getbalance(){
         // console.log(eos.getInfo({}));
 
         var queryAcct = document.getElementById("txtfrom").value;
-        eos.getCurrencyBalance({ code: "eosio.token", account: queryAcct, symbol: "EOS" }).then(result => $("#txtbalance").val(result[0]));
+        eos.getCurrencyBalance({ code: "selftoken", account: queryAcct, symbol: "SYS" }).then(result => $("#txtbalance").val(result[0]));
     }
 
 
@@ -113,12 +113,12 @@
                 <input type="text" class="form-control" id="txtfrom" placeholder="">
             </div>
             <div class="col-md-12">
-                <button type="button" class="btn btn-primary" onclick="getbalance()">查EOS余额</button>
+                <button type="button" class="btn btn-primary" onclick="getbalance()">查SYS余额</button>
             </div>
             <br><br>
             <div class="col-md-12">
                 <h2>账户余额：</h2>
-                <input type="text" class="form-control" id="txtbalance" value="0.0000 EOS" readonly>
+                <input type="text" class="form-control" id="txtbalance" value="0.0000 SYS" readonly>
             </div>
 
         </div>
