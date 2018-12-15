@@ -64,11 +64,15 @@ https://dev4eos.com/
 
 http://blog.eosdata.io/index.php/2018/09/25/cryptokylin-eos-testnet/
 
+https://kylin.eosx.io/
+
 https://kylin.bloks.io/
 
 ##### Jungle 测试网
 
 http://blog.eosdata.io/index.php/2018/11/05/jungle-eos-testnet/
+
+https://jungle.eosx.io/
 
 https://jungle.bloks.io/
 
