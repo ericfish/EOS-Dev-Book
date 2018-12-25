@@ -44,33 +44,15 @@ EOS 链上投票（Kylin 测试网）
 
 https://ericfish.github.io/eosvote/
 
-### 其它
+### 测试环境
 
-如何设置 Scatter
+如何申请 Kylin 测试网账号、Token，以及连接到 Scatter
 
-https://zhuanlan.zhihu.com/p/40250746
+http://blog.eosdata.io/index.php/2018/12/12/ru-he-pei-zhi-kylin-ce-shi-wang-qian-bao/
 
-如何申请 Jungle 测试网账号、Token，以及连接到 Scatter
-
-https://steemit.com/eos/@ajose01/scatter-and-the-jungle-testnet
-
-#### 测试网工具
-
-https://eostoolkit.io/
+#### 开发和编译工具
 
 https://dev4eos.com/
-
-##### 麒麟测试网
-
-http://blog.eosdata.io/index.php/2018/09/25/cryptokylin-eos-testnet/
-
-https://kylin.bloks.io/
-
-##### Jungle 测试网
-
-http://blog.eosdata.io/index.php/2018/11/05/jungle-eos-testnet/
-
-https://jungle.bloks.io/
 
 ##### 开发者社区
 
