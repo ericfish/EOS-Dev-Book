@@ -10,7 +10,7 @@
 
 ## 2-Token
 
-本地 Docker EOS 环境部署和测试
+Token 合约的编译、部署和测试
 
 ## 3-Wallet
 
