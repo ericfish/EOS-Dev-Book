@@ -4,6 +4,8 @@
 
 购买实体书：[京东](https://search.jd.com/Search?keyword=EOS%E5%8C%BA%E5%9D%97%E9%93%BE%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97&enc=utf-8&wq=EOS%E5%8C%BA%E5%9D%97%E9%93%BE%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97)
 
+视频教程：[Youtube](https://www.youtube.com/playlist?list=PLyM_BB-jMJPrj79ykPNQPgJ5kinwLi8W_)
+
 ## 1-HelloWorld
 
 本地 Docker EOS 环境部署和测试
