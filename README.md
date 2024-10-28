@@ -44,16 +44,7 @@ https://ericfish.github.io/eosvote/
 
 如何申请 Kylin 测试网账号、Token，以及连接到 Scatter
 
-http://blog.eosdata.io/index.php/2018/12/25/ru-he-pei-zhi-kylin-ce-shi-wang-qian-bao/
-
 #### 开发和编译工具
 
 https://dev4eos.com/
 
-##### 开发者社区
-
-http://blog.eosdata.io
-
-扫码加入柚子开发者微信群
-
-![w300](http://qiniu.eth.fm/2018-11-22-qrcode-canaan.jpg)
